@@ -39,7 +39,7 @@ public:
 	bool Diff;                  // 0x004A
 	char pad_004B[21];          // 0x004B
 	class Unknown_1* N0000005B; // 0x0060
-	char pad_0068[8];           // 0x 0068
+	char pad_0068[8];           // 0x0068
 	std::int32_t Gear_1;        // 0x0070
 	std::int32_t Gear_2;        // 0x0074
 	char pad_0078[56];          // 0x0078
