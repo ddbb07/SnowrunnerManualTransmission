@@ -3,11 +3,12 @@
 #include "config.h"
 #include "input.h"
 #include "memory.h"
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_sinks.h>
 
 HMODULE g_hModule = NULL;
 std::atomic<bool> hasConsole = false;
 std::atomic<bool> alive = true;
-std::ofstream logFile;
 
 void AttachConsole()
 {
@@ -23,13 +24,13 @@ void AttachConsole()
 		std::cerr.clear();
 		std::clog.clear();
 
-		LogMessage("Started Logging");
+		spdlog::info("Started Logging");
 	}
 }
 
 void DetachConsole() {
 	if (hasConsole) {
-		LogMessage("Console Detached. You can close this window.");
+		spdlog::info("Console Detached. You can close this window.");
 		FreeConsole();
 		hasConsole = false;
 	}
@@ -45,8 +46,13 @@ void DetachDLL() {
 
 DWORD WINAPI MainThread(LPVOID lpReserved)
 {
-	logFile.open("SMT_LOG.txt");
-	logFile << std::unitbuf;
+	auto logger = std::make_shared<spdlog::logger>("SMT", spdlog::sinks_init_list{
+		std::make_shared<spdlog::sinks::basic_file_sink_mt>("SMT_LOG.txt"),
+		std::make_shared<spdlog::sinks::stdout_sink_mt>()
+	});
+	logger->set_pattern("[%H:%M:%S.%e] %v");
+	logger->flush_on(spdlog::level::info);
+	spdlog::set_default_logger(logger);
 	//AttachConsole();
 	//Sleep(10000);
 	LoadIniConfig();
@@ -73,7 +79,7 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 		ShutdownMemory();
 		ShutdownGui();
 		DetachConsole();
-		logFile.close();
+		spdlog::shutdown();
 		break;
 	}
 	return TRUE;

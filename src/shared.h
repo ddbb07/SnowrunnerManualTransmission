@@ -17,7 +17,6 @@
 #include <cstdio>
 #include <cstdint>
 #include <string>
-#include <iomanip>
 #include <sstream>
 #include <chrono>
 #include <thread>
@@ -28,11 +27,10 @@
 #include <detours.h>
 #include <psapi.h>
 #include <ranges>
+#include <spdlog/spdlog.h>
 
 #define STR2(x) #x
 #define STR(x) STR2(x)
-
-extern std::ofstream logFile;
 
 struct FastIO {
 	FastIO() {
@@ -41,38 +39,4 @@ struct FastIO {
 	}
 };
 inline FastIO fast_io_dummy;
-
-inline std::string currentTime() {
-	auto time = std::chrono::system_clock::now();
-	std::time_t t = std::chrono::system_clock::to_time_t(time);
-	std::tm tm;
-	localtime_s(&tm, &t);
-	std::ostringstream oss;
-	oss << '[' << std::setw(2) << std::setfill('0') << tm.tm_hour
-		<< ':' << std::setw(2) << std::setfill('0') << tm.tm_min
-		<< ':' << std::setw(2) << std::setfill('0') << tm.tm_sec
-		<< '.' << std::setw(3) << std::setfill('0') << (duration_cast<std::chrono::milliseconds>(time.time_since_epoch()) % 1000).count() << ']';
-	return oss.str();
-}
-
-template<typename T>
-inline void LogMessage(const T& msg) {
-	std::cout << currentTime() << ' ' << msg << '\n';
-	logFile << currentTime() << ' ' << msg << '\n';
-}
-
-template<typename T, typename... Args>
-inline void LogMessage(const T& first, const Args&... rest) {
-	std::cout << currentTime() << ' ' << first;
-	logFile << currentTime() << ' ' << first;
-	using expander = int[];
-	(void)expander {
-		0, (std::cout << ' ' << rest, 0)...
-	};
-	(void)expander {
-		0, (logFile << ' ' << rest, 0)...
-	};
-	std::cout << '\n';
-	logFile << '\n';
-}
 

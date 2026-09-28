@@ -230,7 +230,7 @@ namespace SMT {
 }
 
 DWORD WINAPI ProcessInput(LPVOID lpReserved) {
-	LogMessage("Processing input");
+	spdlog::info("Processing input");
 	while (keepAliveInput) {
 		auto nextFrameTime = std::chrono::steady_clock::now();
 		if (GetForegroundWindow() == window) {

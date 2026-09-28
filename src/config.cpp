@@ -75,11 +75,11 @@ void LoadIniConfig() {
 				iniConfig[category.first][entry.first] = tempConfig[category.first][entry.first];
 			}
 		}
-		LogMessage("Ini config found.");
+		spdlog::info("Ini config found.");
 	}
 	else {
 		iniConfig.save(configFilename);
-		LogMessage("Ini config not found. Using default.");
+		spdlog::info("Ini config not found. Using default.");
 	}
 }
 

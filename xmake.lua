@@ -6,6 +6,7 @@ set_toolchains("mingw[clang]@llvm-mingw")
 
 add_requires("llvm-mingw", "microsoft-detours", "stb")
 add_requires("imgui v1.92.9+b", {configs = {dx11 = true, win32 = true}})
+add_requires("spdlog", {configs = {header_only = true, std_format = true}})
 
 includes("third_party")
 
@@ -15,7 +16,7 @@ target("SMT")
     set_extension(".asi")
 
     add_deps("ois")
-    add_packages("microsoft-detours", "imgui", "stb")
+    add_packages("microsoft-detours", "imgui", "stb", "spdlog")
 
     add_files("src/*.cpp", "src/kiero/*.cpp")
     add_includedirs("src", "src/kiero", "src/inifile-cpp/include", "src/tsl")

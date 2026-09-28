@@ -124,14 +124,14 @@ int32_t ScanQuiet(const char* signature, size_t begin = 0, size_t end = 0) {
 		Sleep(100);
 	}
 	if (retries > 0) {
-		LogMessage("Took", retries, "retries to resolve");
+		spdlog::info("Took {} retries to resolve", retries);
 	}
 	return offset;
 }
 
 int32_t Scan(const char* name, const char* signature, size_t begin = 0, size_t end = 0) {
 	int32_t offset = ScanQuiet(signature, begin, end);
-	LogMessage(name, std::format("{:08x}", offset));
+	spdlog::info("{} {:08x}", name, offset);
 	return offset;
 }
 
@@ -149,7 +149,7 @@ int32_t DigAHoleStable(uintptr_t result) {
 		retries++;
 	}
 	if (retries > 0) {
-		LogMessage("Took", retries, "retries to resolve");
+		spdlog::info("Took {} retries to resolve", retries);
 	}
 	return value;
 }
@@ -165,7 +165,7 @@ void InitMemory() {
 	int32_t SetPowerCoefOffset = Scan("SetPowerCoef:", "48 8B 41 68 F3 0F 11 48 38 C3");
 	int32_t SetCurrentVehicleOffset = Scan("SetCurrentVehicle:", "48 8B C4 53 57 48 81 EC 98 00 00 00 48 8B FA 48 8B D9 48 39 51 08 0F 84 ? ? ? ? 48 89 68 E8 48 83 C1 70 48 89 70 E0 4C 89 70 D8 4C 89 78 D0");
 	int32_t combine_TRUCK_CONTROLOffset = DigAHoleStable(ScanQuiet("40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 33 C9 48 89 18"));
-	LogMessage("combine_TRUCK_CONTROL:", std::format("{:08x}", combine_TRUCK_CONTROLOffset));
+	spdlog::info("combine_TRUCK_CONTROL: {:08x}", combine_TRUCK_CONTROLOffset);
 
 	TruckControlPtr = (combine_TRUCK_CONTROL**)(base + combine_TRUCK_CONTROLOffset);
 	ShiftGearO = (Fnc_ShiftGear*)(base + ShiftGearOffset);
@@ -199,7 +199,7 @@ void InitMemory() {
 		veh->ShiftToGear(1, 1.05);
 	}
 
-	LogMessage("init", base);
+	spdlog::info("init {}", base);
 }
 
 void ShutdownMemory() {
