@@ -63,7 +63,7 @@ void InitGui() {
 	{
 		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)
 		{
-			kiero::bind(8, (void**)&originalPresent, hookedPresent);
+			kiero::bind(8, (void**)&originalPresent, (void*)hookedPresent);
 			init_hook = true;
 		}
 	} while (!init_hook);

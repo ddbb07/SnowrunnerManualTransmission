@@ -39,7 +39,8 @@ struct FastIO {
 		std::ios_base::sync_with_stdio(false);
 		std::cin.tie(nullptr);
 	}
-} fast_io_dummy;
+};
+inline FastIO fast_io_dummy;
 
 inline std::string currentTime() {
 	auto time = std::chrono::system_clock::now();
