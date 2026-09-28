@@ -98,7 +98,6 @@ void InitImGui()
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
-	//io.ConfigDebugHighlightIdConflicts = false;
 	io.FontDefault = io.Fonts->AddFontFromMemoryTTF((void*)TTLakesNeue_DemiBold_ttf, TTLakesNeue_DemiBold_ttf_len, 24.0f);
 	ImGui_ImplWin32_Init(window);
 	ImGui_ImplDX11_Init(pDevice, pContext);
@@ -288,24 +287,6 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, U
 		}
 		ImGui::SameLine();
 		ImGui::Text("To change keybind left click on it, press desired keys/buttons/axis and right click to confirm. Use right click to clear a keybind.");
-		//ImGui::SameLine();
-		//ImGui::InvisibleButton("##debug_separator", ImVec2(width * 0.43f, ImGui::GetItemRectSize().y));
-		//ImGui::SameLine();
-		//if (hasConsole) {
-		//	if (ImGui::Button("Detach console")) {
-		//		DetachConsole();
-		//	}
-		//}
-		//else {
-		//	if (ImGui::Button("Attach console")) {
-		//		AttachConsole();
-		//	}
-		//}
-		//ImGui::SameLine();
-		//if (ImGui::Button("Unload")) {
-		//	DetachDLL();
-		//	//MessageBoxA(window, "You thought", "SIKE!", MB_ICONERROR | MB_OK);
-		//}
 		ImGui::End();
 	}
 	ImGui::Render();

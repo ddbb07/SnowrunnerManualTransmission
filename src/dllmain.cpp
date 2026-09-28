@@ -53,8 +53,6 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
 	logger->set_pattern("[%H:%M:%S.%e] %v");
 	logger->flush_on(spdlog::level::info);
 	spdlog::set_default_logger(logger);
-	//AttachConsole();
-	//Sleep(10000);
 	LoadIniConfig();
 	InitMemory();
 	InitGui();
@@ -73,7 +71,6 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 		CreateThread(nullptr, 0, MainThread, hMod, 0, nullptr);
 		break;
 	case DLL_PROCESS_DETACH:
-		//SaveIniConfig();
 		ShutdownInput();
 		do { Sleep(100); } while (keepAliveInput);
 		ShutdownMemory();
