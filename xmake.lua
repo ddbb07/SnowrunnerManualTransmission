@@ -1,0 +1,24 @@
+set_languages("cxx20")
+set_plat("mingw")
+set_arch("x86_64")
+add_rules("mode.debug", "mode.release")
+set_toolchains("mingw[clang]@llvm-mingw")
+
+add_requires("llvm-mingw", "microsoft-detours", "stb")
+add_requires("imgui v1.92.9+b", {configs = {dx11 = true, win32 = true}})
+
+includes("third_party")
+
+target("SMT")
+    set_kind("shared")
+    set_prefixname("")
+    set_extension(".asi")
+
+    add_deps("ois")
+    add_packages("microsoft-detours", "imgui", "stb")
+
+    add_files("src/*.cpp", "src/kiero/*.cpp")
+    add_includedirs("src", "src/kiero", "src/inifile-cpp/include", "src/tsl")
+    add_defines("UNICODE", "_UNICODE")
+    add_syslinks("d3d11", "d3dcompiler", "dxgi", "gdi32", "dwmapi")
+    add_shflags("-static", "-Wl,--exclude-all-symbols")
