@@ -3,7 +3,7 @@
 #define VERSION 1.5
 
 #include "framework.h"
-#include <Windows.h>
+#include <windows.h>
 #include <d3d11.h>
 #include <dxgi.h>
 #include <kiero.h>
@@ -26,7 +26,7 @@
 #include <OIS.h>
 #include <utility>
 #include <detours.h>
-#include <Psapi.h>
+#include <psapi.h>
 #include <ranges>
 
 #define STR2(x) #x
