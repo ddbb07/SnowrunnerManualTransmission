@@ -111,9 +111,12 @@ void InitImGui() {
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+    ImFontConfig fontConfig;
+    fontConfig.FontDataOwnedByAtlas = false;
     io.FontDefault = io.Fonts->AddFontFromMemoryTTF(
-        (void *)TTLakesNeue_DemiBold_ttf.data(),
-        static_cast<int>(TTLakesNeue_DemiBold_ttf.size()), 24.0f);
+        const_cast<void *>(
+            static_cast<const void *>(TTLakesNeue_DemiBold_ttf.data())),
+        static_cast<int>(TTLakesNeue_DemiBold_ttf.size()), 24.0f, &fontConfig);
     ImGui_ImplWin32_Init(window);
     ImGui_ImplDX11_Init(pDevice, pContext);
     if (iniConfig["KEYBOARD"]["SHOW MENU"].as<std::string>() == "NONE") {
