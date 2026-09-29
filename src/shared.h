@@ -6,7 +6,7 @@
 #define STR(x) STR2(x)
 
 struct FastIO {
-    FastIO() {
+    FastIO() noexcept {
         std::ios_base::sync_with_stdio(false);
         std::cin.tie(nullptr);
     }
