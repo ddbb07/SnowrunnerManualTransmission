@@ -119,7 +119,7 @@ void InitImGui() {
         static_cast<int>(TTLakesNeue_DemiBold_ttf.size()), 24.0f, &fontConfig);
     ImGui_ImplWin32_Init(window);
     ImGui_ImplDX11_Init(pDevice, pContext);
-    if (iniConfig["KEYBOARD"]["SHOW MENU"].as<std::string>() == "NONE") {
+    if (GetIniConfig()["KEYBOARD"]["SHOW MENU"].as<std::string>() == "NONE") {
         showGui = true;
     }
     unsigned char *pixels = stbi_load_from_memory(
@@ -183,10 +183,12 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
 
     ImVec2 viewport = ImGui::GetMainViewport()->Size;
 
-    if ((iniConfig["KEYBOARD"]["RANGE HIGH"].as<std::string>() != "NONE" ||
-         iniConfig["KEYBOARD"]["RANGE LOW"].as<std::string>() != "NONE" ||
-         iniConfig["CONTROLLER"]["RANGE HIGH"].as<std::string>() != "NONE" ||
-         iniConfig["CONTROLLER"]["RANGE LOW"].as<std::string>() != "NONE") &&
+    if ((GetIniConfig()["KEYBOARD"]["RANGE HIGH"].as<std::string>() != "NONE" ||
+         GetIniConfig()["KEYBOARD"]["RANGE LOW"].as<std::string>() != "NONE" ||
+         GetIniConfig()["CONTROLLER"]["RANGE HIGH"].as<std::string>() !=
+             "NONE" ||
+         GetIniConfig()["CONTROLLER"]["RANGE LOW"].as<std::string>() !=
+             "NONE") &&
         GetCurrentVehicle()) {
         ImFont *font = ImGui::GetFont();
         float fontSize = 30.0f;
@@ -241,7 +243,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
             ImGui::TableSetupColumn("Key", ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableHeadersRow();
 
-            for (const auto &entry : iniConfig["KEYBOARD"]) {
+            for (const auto &entry : GetIniConfig()["KEYBOARD"]) {
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Dummy(ImVec2(0, 0.1f));
@@ -250,14 +252,14 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
                 std::string buttonText = entry.second.as<std::string>() + "##" +
                                          std::to_string(++count);
                 if (ImGui::Button(buttonText.c_str())) {
-                    iniConfig["KEYBOARD"][entry.first] = "LISTENING";
+                    GetIniConfig()["KEYBOARD"][entry.first] = "LISTENING";
                     tempPressed.clear();
                 }
                 if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
                     if (entry.second.as<std::string>() == "LISTENING") {
-                        iniConfig["KEYBOARD"][entry.first] = "FOUND";
+                        GetIniConfig()["KEYBOARD"][entry.first] = "FOUND";
                     } else {
-                        iniConfig["KEYBOARD"][entry.first] = "NONE";
+                        GetIniConfig()["KEYBOARD"][entry.first] = "NONE";
                     }
                 }
             }
@@ -274,7 +276,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
             ImGui::TableSetupColumn("Key", ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableHeadersRow();
 
-            for (const auto &entry : iniConfig["CONTROLLER"]) {
+            for (const auto &entry : GetIniConfig()["CONTROLLER"]) {
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Dummy(ImVec2(0, 0.1f));
@@ -283,14 +285,14 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
                 std::string buttonText = entry.second.as<std::string>() + "##" +
                                          std::to_string(++count);
                 if (ImGui::Button(buttonText.c_str())) {
-                    iniConfig["CONTROLLER"][entry.first] = "LISTENING";
+                    GetIniConfig()["CONTROLLER"][entry.first] = "LISTENING";
                     tempPressed.clear();
                 }
                 if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
                     if (entry.second.as<std::string>() == "LISTENING") {
-                        iniConfig["CONTROLLER"][entry.first] = "FOUND";
+                        GetIniConfig()["CONTROLLER"][entry.first] = "FOUND";
                     } else {
-                        iniConfig["CONTROLLER"][entry.first] = "NONE";
+                        GetIniConfig()["CONTROLLER"][entry.first] = "NONE";
                     }
                 }
             }
@@ -307,7 +309,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
             ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableHeadersRow();
 
-            for (const auto &entry : iniConfig["OPTIONS"]) {
+            for (const auto &entry : GetIniConfig()["OPTIONS"]) {
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Dummy(ImVec2(0, 0.1f));
@@ -317,7 +319,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
                         entry.second.as<bool>()
                             ? std::string("True##" + entry.first).c_str()
                             : std::string("False##" + entry.first).c_str())) {
-                    iniConfig["OPTIONS"][entry.first] =
+                    GetIniConfig()["OPTIONS"][entry.first] =
                         !entry.second.as<bool>();
                 }
             }

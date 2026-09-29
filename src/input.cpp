@@ -365,8 +365,8 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
             }
             mouse->capture();
             bool goToNeutral =
-                iniConfig["OPTIONS"]["REQUIRE GEAR HELD"].as<bool>();
-            for (const auto &action : iniConfig["KEYBOARD"]) {
+                GetIniConfig()["OPTIONS"]["REQUIRE GEAR HELD"].as<bool>();
+            for (const auto &action : GetIniConfig()["KEYBOARD"]) {
                 bool pressed = true;
                 if (action.second.as<std::string>() == "FOUND") {
                     if (tempPressed.size() > 0) {
@@ -376,9 +376,9 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
                             tempStr += "+";
                         }
                         tempStr.pop_back();
-                        iniConfig["KEYBOARD"][action.first] = tempStr;
+                        GetIniConfig()["KEYBOARD"][action.first] = tempStr;
                     } else {
-                        iniConfig["KEYBOARD"][action.first] = "NONE";
+                        GetIniConfig()["KEYBOARD"][action.first] = "NONE";
                     }
                     tempPressed.clear();
                 } else {
@@ -391,11 +391,12 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
                             if (action.first.starts_with("GEAR") &&
                                 action.second.as<std::string>() != "NONE") {
                                 if ((std::string(part.begin(), part.end()) ==
-                                         iniConfig["KEYBOARD"]["RANGE HIGH"]
-                                             .as<std::string>() &&
+                                         GetIniConfig()["KEYBOARD"]
+                                                       ["RANGE HIGH"]
+                                                           .as<std::string>() &&
                                      range == 1) ||
                                     (std::string(part.begin(), part.end()) ==
-                                         iniConfig["KEYBOARD"]["RANGE LOW"]
+                                         GetIniConfig()["KEYBOARD"]["RANGE LOW"]
                                              .as<std::string>() &&
                                      range == -1)) {
                                     continue;
@@ -417,7 +418,7 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
                 }
                 wasPressedKb[action.first] = pressed;
             }
-            for (const auto &action : iniConfig["CONTROLLER"]) {
+            for (const auto &action : GetIniConfig()["CONTROLLER"]) {
                 bool pressed = true;
                 if (action.second.as<std::string>() == "FOUND") {
                     if (tempPressed.size() > 0) {
@@ -427,9 +428,9 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
                             tempStr += "+";
                         }
                         tempStr.pop_back();
-                        iniConfig["CONTROLLER"][action.first] = tempStr;
+                        GetIniConfig()["CONTROLLER"][action.first] = tempStr;
                     } else {
-                        iniConfig["CONTROLLER"][action.first] = "NONE";
+                        GetIniConfig()["CONTROLLER"][action.first] = "NONE";
                     }
                     tempPressed.clear();
                 } else {
@@ -442,12 +443,14 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
                             if (action.first.starts_with("GEAR") &&
                                 action.second.as<std::string>() != "NONE") {
                                 if ((std::string(part.begin(), part.end()) ==
-                                         iniConfig["CONTROLLER"]["RANGE HIGH"]
-                                             .as<std::string>() &&
+                                         GetIniConfig()["CONTROLLER"]
+                                                       ["RANGE HIGH"]
+                                                           .as<std::string>() &&
                                      range == 1) ||
                                     (std::string(part.begin(), part.end()) ==
-                                         iniConfig["CONTROLLER"]["RANGE LOW"]
-                                             .as<std::string>() &&
+                                         GetIniConfig()["CONTROLLER"]
+                                                       ["RANGE LOW"]
+                                                           .as<std::string>() &&
                                      range == -1)) {
                                     continue;
                                 }
@@ -470,7 +473,7 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
             }
             for (const auto &fnc : functionsToRun) {
                 bindFunctions[fnc]();
-                if (iniConfig["OPTIONS"]["REQUIRE CLUTCH"].as<bool>()) {
+                if (GetIniConfig()["OPTIONS"]["REQUIRE CLUTCH"].as<bool>()) {
                     if (auto veh = GetCurrentVehicle()) {
                         if (!wasPressedKb["CLUTCH"] &&
                             !wasPressedJoy["CLUTCH"]) {

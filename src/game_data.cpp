@@ -23,7 +23,7 @@ bool Vehicle::ShiftToGear(std::int32_t targetGear, float powerCoef) {
         targetGear = GetMaxGear() + 1;
     }
 
-    if (iniConfig["OPTIONS"]["IMMERSIVE MODE"].as<bool>()) {
+    if (GetIniConfig()["OPTIONS"]["IMMERSIVE MODE"].as<bool>()) {
         if (IsInAuto[this] == false) {
             return true;
         }
@@ -42,7 +42,7 @@ bool Vehicle::ShiftToGear(std::int32_t targetGear, float powerCoef) {
 bool Vehicle::ShiftToNextGear() {
     std::int32_t gear = TruckAction->Gear_1 + 1;
 
-    if (gear == 0 && iniConfig["OPTIONS"]["SKIP NEUTRAL"].as<bool>()) {
+    if (gear == 0 && GetIniConfig()["OPTIONS"]["SKIP NEUTRAL"].as<bool>()) {
         gear = 1;
     }
 
@@ -52,11 +52,11 @@ bool Vehicle::ShiftToNextGear() {
 bool Vehicle::ShiftToPrevGear() {
     std::int32_t gear = TruckAction->Gear_1 - 1;
 
-    if (gear == 0 && iniConfig["OPTIONS"]["SKIP NEUTRAL"].as<bool>()) {
+    if (gear == 0 && GetIniConfig()["OPTIONS"]["SKIP NEUTRAL"].as<bool>()) {
         gear = -1;
     }
 
-    if (iniConfig["OPTIONS"]["IMMERSIVE MODE"].as<bool>()) {
+    if (GetIniConfig()["OPTIONS"]["IMMERSIVE MODE"].as<bool>()) {
         gear = std::max(gear, 1);
     }
 
@@ -101,7 +101,7 @@ std::int32_t Hooked_GetMaxGear(const Vehicle *veh) { return GetMaxGearO(veh); }
 void Hooked_ShiftToAutoGear(Vehicle *veh) {
     veh->TruckAction->IsInAutoMode = false;
 
-    if (iniConfig["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
+    if (GetIniConfig()["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
         return;
     }
 
@@ -112,14 +112,14 @@ void Hooked_ShiftToAutoGear(Vehicle *veh) {
     } else if (veh->TruckAction->Gear_1 <= 1) {
         veh->ShiftToGear(1, 1.05f);
     }
-    if (!iniConfig["OPTIONS"]["REQUIRE CLUTCH"].as<bool>() &&
-        !iniConfig["OPTIONS"]["IMMERSIVE MODE"].as<bool>()) {
+    if (!GetIniConfig()["OPTIONS"]["REQUIRE CLUTCH"].as<bool>() &&
+        !GetIniConfig()["OPTIONS"]["IMMERSIVE MODE"].as<bool>()) {
         ShiftToAutoGearO(veh);
     }
 }
 
 bool Hooked_ShiftToReverse(Vehicle *veh) {
-    if (iniConfig["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
+    if (GetIniConfig()["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
         return false;
     }
 
@@ -127,7 +127,7 @@ bool Hooked_ShiftToReverse(Vehicle *veh) {
 }
 
 bool Hooked_ShiftToNeutral(Vehicle *veh) {
-    if (iniConfig["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
+    if (GetIniConfig()["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
         return false;
     }
 
@@ -135,7 +135,7 @@ bool Hooked_ShiftToNeutral(Vehicle *veh) {
 }
 
 bool Hooked_ShiftToHigh(Vehicle *veh) {
-    if (iniConfig["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
+    if (GetIniConfig()["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
         return false;
     }
 
@@ -143,7 +143,7 @@ bool Hooked_ShiftToHigh(Vehicle *veh) {
 }
 
 bool Hooked_DisableAutoAndShift(Vehicle *veh, std::int32_t gear) {
-    if (iniConfig["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
+    if (GetIniConfig()["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
         return false;
     }
 
@@ -153,7 +153,7 @@ bool Hooked_DisableAutoAndShift(Vehicle *veh, std::int32_t gear) {
 }
 
 void Hooked_SetPowerCoef(Vehicle *veh, float coef) {
-    if (iniConfig["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
+    if (GetIniConfig()["OPTIONS"]["DISABLE GAME SHIFTING"].as<bool>()) {
         coef = currentCoef;
     }
     if (IsInAuto[veh]) {

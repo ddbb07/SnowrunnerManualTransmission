@@ -3,9 +3,13 @@
 #include <inicpp.h>
 #include <spdlog/spdlog.h>
 #include <string>
+#include <string_view>
 
-const std::string configFilename = "SMT.ini";
-ini::IniFile iniConfig;
+constexpr std::string_view configFilename = "SMT.ini";
+ini::IniFile &GetIniConfig() {
+    static ini::IniFile iniConfig;
+    return iniConfig;
+}
 
 ini::IniFile WriteDefaultIniConfig() {
     ini::IniFile defaultIniConfig;
@@ -69,21 +73,21 @@ ini::IniFile WriteDefaultIniConfig() {
 }
 
 void LoadIniConfig() {
-    iniConfig = WriteDefaultIniConfig();
-    std::ifstream is(configFilename);
+    GetIniConfig() = WriteDefaultIniConfig();
+    std::ifstream is((std::string(configFilename)));
     if (is.is_open()) {
-        ini::IniFile tempConfig(configFilename);
+        ini::IniFile tempConfig((std::string(configFilename)));
         for (const auto &category : tempConfig) {
             for (const auto &entry : tempConfig[category.first]) {
-                iniConfig[category.first][entry.first] =
+                GetIniConfig()[category.first][entry.first] =
                     tempConfig[category.first][entry.first];
             }
         }
         spdlog::info("Ini config found.");
     } else {
-        iniConfig.save(configFilename);
+        GetIniConfig().save(std::string(configFilename));
         spdlog::info("Ini config not found. Using default.");
     }
 }
 
-void SaveIniConfig() { iniConfig.save(configFilename); }
+void SaveIniConfig() { GetIniConfig().save(std::string(configFilename)); }
