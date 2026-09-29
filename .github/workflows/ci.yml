@@ -16,8 +16,8 @@ jobs:
 
       - uses: xmake-io/github-action-setup-xmake@v1
         with:
-          actions-cache-folder: '.xmake-cache'
-          actions-cache-key: 'ubuntu-latest'
+          actions-cache-folder: ".xmake-cache"
+          actions-cache-key: "ubuntu-latest"
 
       - name: Cache xmake packages
         uses: actions/cache@v6
@@ -59,8 +59,8 @@ jobs:
 
       - uses: xmake-io/github-action-setup-xmake@v1
         with:
-          actions-cache-folder: '.xmake-cache'
-          actions-cache-key: 'ubuntu-latest'
+          actions-cache-folder: ".xmake-cache"
+          actions-cache-key: "ubuntu-latest"
 
       - name: Cache xmake packages
         uses: actions/cache@v6
