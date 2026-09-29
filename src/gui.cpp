@@ -167,9 +167,11 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
             pDevice->CreateRenderTargetView(pBackBuffer, nullptr,
                                             &mainRenderTargetView);
             pBackBuffer->Release();
-            originalWndProc = reinterpret_cast<WNDPROC>(
-                SetWindowLongPtr(window, GWLP_WNDPROC,
-                                 reinterpret_cast<LONG_PTR>(hookedWndProc)));
+            originalWndProc =
+                reinterpret_cast<WNDPROC>( // NOLINT(performance-no-int-to-ptr)
+                    SetWindowLongPtr(
+                        window, GWLP_WNDPROC,
+                        reinterpret_cast<LONG_PTR>(hookedWndProc)));
             InitImGui();
             isGuiInitialized = true;
         }
