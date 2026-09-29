@@ -163,7 +163,8 @@ std::string abbreviate(const std::string &input) {
 
     while (ss >> word) {
         if (!word.empty()) {
-            abbreviation += toupper(word[0]);
+            abbreviation +=
+                static_cast<char>(toupper(static_cast<unsigned char>(word[0])));
         }
     }
 

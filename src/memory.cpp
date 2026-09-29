@@ -35,7 +35,8 @@ uint32_t PatternScan(const char *signature, size_t begin = 0, size_t end = 0) {
                     current++;
                 bytes.push_back('\?');
             } else {
-                bytes.push_back(strtoul(current, &current, 16));
+                bytes.push_back(
+                    static_cast<char>(strtoul(current, &current, 16)));
             }
         }
         return bytes;
@@ -88,14 +89,16 @@ int32_t DigAHole(uintptr_t result) {
     for (; *reinterpret_cast<uint8_t *>(address) != 0xE8; address++) {
     }
     address++;
-    int32_t value = ToLittleEndian(*reinterpret_cast<int32_t *>(address));
+    int32_t value = static_cast<int32_t>(
+        ToLittleEndian(*reinterpret_cast<int32_t *>(address)));
     address += 4;
     value = result - base + value + (address - result);
     address = base + value;
     for (; *reinterpret_cast<uint8_t *>(address) != 0x05; address++) {
     }
     address++;
-    value = ToLittleEndian(*reinterpret_cast<int32_t *>(address));
+    value = static_cast<int32_t>(
+        ToLittleEndian(*reinterpret_cast<int32_t *>(address)));
     address += 4;
     value = address - base + value;
     return value;
@@ -124,7 +127,8 @@ Vehicle *GetCurrentVehicle() {
 int32_t ScanQuiet(const char *signature, size_t begin = 0, size_t end = 0) {
     int32_t offset;
     int32_t retries = 0;
-    while (!(offset = PatternScan(signature, begin, end))) {
+    while (
+        !(offset = static_cast<int32_t>(PatternScan(signature, begin, end)))) {
         retries++;
         Sleep(100);
     }

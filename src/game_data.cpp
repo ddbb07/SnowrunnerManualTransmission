@@ -108,7 +108,8 @@ void Hooked_ShiftToAutoGear(Vehicle *veh) {
     IsInAuto[veh] = true;
 
     if (veh->TruckAction->Gear_1 == (GetMaxGearO(veh) + 1)) {
-        veh->ShiftToGear(round(veh->GetMaxGear() * 0.8), 1.0f);
+        veh->ShiftToGear(
+            static_cast<std::int32_t>(round(veh->GetMaxGear() * 0.8)), 1.0f);
     } else if (veh->TruckAction->Gear_1 <= 1) {
         veh->ShiftToGear(1, 1.05f);
     }

@@ -197,7 +197,8 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
         ImVec2 boxPos = ImVec2(pos.x * 0.975f, pos.y * 0.999f);
         drawList->AddImage(
             reinterpret_cast<ImTextureID>(boxTexture), boxPos,
-            ImVec2(boxPos.x + boxWidth, boxPos.y + boxHeight * 0.8f),
+            ImVec2(boxPos.x + static_cast<float>(boxWidth),
+                   boxPos.y + static_cast<float>(boxHeight) * 0.8f),
             ImVec2(0, 0), ImVec2(1, 1), IM_COL32(255, 255, 255, 127));
         switch (range) {
         case -1: {
