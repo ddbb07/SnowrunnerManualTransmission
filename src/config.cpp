@@ -73,8 +73,8 @@ void LoadIniConfig() {
     std::ifstream is(configFilename);
     if (is.is_open()) {
         ini::IniFile tempConfig(configFilename);
-        for (auto category : tempConfig) {
-            for (auto entry : tempConfig[category.first]) {
+        for (const auto &category : tempConfig) {
+            for (const auto &entry : tempConfig[category.first]) {
                 iniConfig[category.first][entry.first] =
                     tempConfig[category.first][entry.first];
             }

@@ -235,7 +235,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
             ImGui::TableSetupColumn("Key", ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableHeadersRow();
 
-            for (auto entry : iniConfig["KEYBOARD"]) {
+            for (const auto &entry : iniConfig["KEYBOARD"]) {
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Dummy(ImVec2(0, 0.1f));
@@ -268,7 +268,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
             ImGui::TableSetupColumn("Key", ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableHeadersRow();
 
-            for (auto entry : iniConfig["CONTROLLER"]) {
+            for (const auto &entry : iniConfig["CONTROLLER"]) {
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Dummy(ImVec2(0, 0.1f));
@@ -301,7 +301,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
             ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableHeadersRow();
 
-            for (auto entry : iniConfig["OPTIONS"]) {
+            for (const auto &entry : iniConfig["OPTIONS"]) {
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Dummy(ImVec2(0, 0.1f));

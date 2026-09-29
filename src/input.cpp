@@ -366,12 +366,12 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
             mouse->capture();
             bool goToNeutral =
                 iniConfig["OPTIONS"]["REQUIRE GEAR HELD"].as<bool>();
-            for (auto action : iniConfig["KEYBOARD"]) {
+            for (const auto &action : iniConfig["KEYBOARD"]) {
                 bool pressed = true;
                 if (action.second.as<std::string>() == "FOUND") {
                     if (tempPressed.size() > 0) {
                         std::string tempStr = "";
-                        for (auto key : tempPressed) {
+                        for (const auto &key : tempPressed) {
                             tempStr += key;
                             tempStr += "+";
                         }
@@ -417,12 +417,12 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
                 }
                 wasPressedKb[action.first] = pressed;
             }
-            for (auto action : iniConfig["CONTROLLER"]) {
+            for (const auto &action : iniConfig["CONTROLLER"]) {
                 bool pressed = true;
                 if (action.second.as<std::string>() == "FOUND") {
                     if (tempPressed.size() > 0) {
                         std::string tempStr = "";
-                        for (auto key : tempPressed) {
+                        for (const auto &key : tempPressed) {
                             tempStr += key;
                             tempStr += "+";
                         }
@@ -468,7 +468,7 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
                 }
                 wasPressedJoy[action.first] = pressed;
             }
-            for (auto fnc : functionsToRun) {
+            for (const auto &fnc : functionsToRun) {
                 bindFunctions[fnc]();
                 if (iniConfig["OPTIONS"]["REQUIRE CLUTCH"].as<bool>()) {
                     if (auto veh = GetCurrentVehicle()) {
