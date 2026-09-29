@@ -11,7 +11,7 @@
 #include <spdlog/spdlog.h>
 #include <vector>
 
-HMODULE hModule = GetModuleHandleA(NULL);
+HMODULE hModule = GetModuleHandleA(nullptr);
 MODULEINFO mInfo;
 bool temp = GetModuleInformation(GetCurrentProcess(), hModule, &mInfo,
                                  sizeof(MODULEINFO));

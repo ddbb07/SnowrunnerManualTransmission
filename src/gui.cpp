@@ -21,10 +21,10 @@
 #include <windows.h>
 
 Present originalPresent;
-HWND window = NULL;
+HWND window = nullptr;
 WNDPROC originalWndProc;
-ID3D11Device *pDevice = NULL;
-ID3D11DeviceContext *pContext = NULL;
+ID3D11Device *pDevice = nullptr;
+ID3D11DeviceContext *pContext = nullptr;
 ID3D11RenderTargetView *mainRenderTargetView;
 std::atomic<bool> showGui = false;
 POINT topLeft;
@@ -32,7 +32,7 @@ int32_t width;
 int32_t height;
 float padding;
 float tableWidth;
-ID3D11ShaderResourceView *boxTexture = NULL;
+ID3D11ShaderResourceView *boxTexture = nullptr;
 int32_t boxWidth, boxHeight, boxChannels;
 
 extern std::atomic<bool> alive;
@@ -158,7 +158,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
             ID3D11Texture2D *pBackBuffer;
             pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
                                   (LPVOID *)&pBackBuffer);
-            pDevice->CreateRenderTargetView(pBackBuffer, NULL,
+            pDevice->CreateRenderTargetView(pBackBuffer, nullptr,
                                             &mainRenderTargetView);
             pBackBuffer->Release();
             originalWndProc = (WNDPROC)SetWindowLongPtr(
@@ -331,7 +331,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
     }
     ImGui::Render();
 
-    pContext->OMSetRenderTargets(1, &mainRenderTargetView, NULL);
+    pContext->OMSetRenderTargets(1, &mainRenderTargetView, nullptr);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
     return originalPresent(pSwapChain, SyncInterval, Flags);

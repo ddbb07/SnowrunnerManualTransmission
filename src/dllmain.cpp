@@ -15,7 +15,7 @@
 #include <spdlog/spdlog.h>
 #include <windows.h>
 
-HMODULE g_hModule = NULL;
+HMODULE g_hModule = nullptr;
 std::atomic<bool> hasConsole = false;
 std::atomic<bool> alive = true;
 

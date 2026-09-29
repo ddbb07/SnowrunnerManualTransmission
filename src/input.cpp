@@ -530,7 +530,8 @@ void InitInput() {
     SMT::MouseListener *myMouseListener = new SMT::MouseListener();
     mouse->setEventCallback(myMouseListener);
 
-    CreateThread(nullptr, 0, ProcessInput, GetModuleHandleA(NULL), 0, nullptr);
+    CreateThread(nullptr, 0, ProcessInput, GetModuleHandleA(nullptr), 0,
+                 nullptr);
 }
 
 void ShutdownInput() {
