@@ -1,4 +1,5 @@
 /.vscode/clangd-local.args
 /.vscode/compile_commands.json
+/.vscode/tasks.json
 /.xmake/**/*
 /build/**/*
