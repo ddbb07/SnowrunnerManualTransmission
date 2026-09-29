@@ -1,0 +1,11 @@
+﻿Checks: >
+  -*,
+  misc-include-cleaner,
+  bugprone-*,
+  performance-*,
+  modernize-*,
+  -bugprone-easily-swappable-parameters,
+  -modernize-use-trailing-return-type
+HeaderFilterRegex: "^(src|include)/"
+CheckOptions:
+  misc-include-cleaner.IgnoreHeaders: 'windows\.h;corecrt\.h;libloaderapi\.h;minwindef\.h;processthreadsapi\.h;synchapi\.h;wincon\.h;windef\.h;winerror\.h;winnt\.h;winscard\.h;winuser\.h'
