@@ -14,26 +14,15 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: xmake-io/github-action-setup-xmake@v1
+      - &setup-xmake
+        uses: xmake-io/github-action-setup-xmake@v1
         with:
           actions-cache-folder: ".xmake-cache"
           actions-cache-key: "ubuntu-latest"
-
-      - name: Cache xmake packages
-        uses: actions/cache@v6
-        with:
-          path: ~/.xmake
-          key: xmake-${{ runner.os }}-${{ hashFiles('xmake.lua', 'third_party/xmake.lua') }}
-
-      - name: Cache build output
-        uses: actions/cache@v6
-        with:
-          path: |
-            build
-            .xmake
-          key: build-${{ runner.os }}-${{ hashFiles('src/**', 'third_party/**/*.cpp', 'third_party/**/*.h', 'xmake.lua', 'third_party/xmake.lua') }}
-          restore-keys: |
-            build-${{ runner.os }}-
+          package-cache: true
+          package-cache-key: "ubuntu-latest"
+          build-cache: true
+          build-cache-key: "ubuntu-latest"
 
       - name: Configure
         run: xmake f -y
@@ -57,16 +46,7 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: xmake-io/github-action-setup-xmake@v1
-        with:
-          actions-cache-folder: ".xmake-cache"
-          actions-cache-key: "ubuntu-latest"
-
-      - name: Cache xmake packages
-        uses: actions/cache@v6
-        with:
-          path: ~/.xmake
-          key: xmake-${{ runner.os }}-${{ hashFiles('xmake.lua', 'third_party/xmake.lua') }}
+      - *setup-xmake
 
       - name: Generate compile_commands.json
         run: xmake project -k compile_commands .
