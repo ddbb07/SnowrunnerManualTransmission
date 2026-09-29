@@ -18,8 +18,8 @@ public:
     uint64_t Size;     // 0x0010
     uint64_t Capacity; // 0x0018
 
-    inline bool Enlarged() const { return Capacity >= 16; }
-    const char *c_str() const {
+    [[nodiscard]] inline bool Enlarged() const { return Capacity >= 16; }
+    [[nodiscard]] const char *c_str() const {
         if (Enlarged()) {
             return Ptr;
         } else {
@@ -74,7 +74,7 @@ public:
     std::array<char, 244> pad_076C;   // 0x076C -- NOT UPDATED
     void SetPowerCoef(float coef);
 
-    std::int32_t GetMaxGear() const;
+    [[nodiscard]] std::int32_t GetMaxGear() const;
 
     /**
      * @brief Switches to @p targetGear gear, if possible.
