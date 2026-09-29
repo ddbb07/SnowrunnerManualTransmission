@@ -330,7 +330,7 @@ bool JoyStickListener::povMoved(const OIS::JoyStickEvent &e, int pov) {
 bool MouseListener::mousePressed(const OIS::MouseEvent &e,
                                  OIS::MouseButtonID button) {
     std::string entry = "Ms." + std::to_string(button);
-    if ((int)button > 1) {
+    if (static_cast<int>(button) > 1) {
         if (!currentlyPressed[entry]) {
             tempPressed.emplace(entry);
         }
@@ -341,7 +341,7 @@ bool MouseListener::mousePressed(const OIS::MouseEvent &e,
 
 bool MouseListener::mouseReleased(const OIS::MouseEvent &e,
                                   OIS::MouseButtonID button) {
-    if ((int)button > 1) {
+    if (static_cast<int>(button) > 1) {
         currentlyPressed["Ms." + std::to_string(button)] = false;
     }
     return true;
@@ -504,7 +504,7 @@ void InitInput() {
     CoInitialize(nullptr);
     OIS::ParamList paramlist;
     std::ostringstream windowHWNDStr;
-    windowHWNDStr << (size_t)window;
+    windowHWNDStr << reinterpret_cast<size_t>(window);
     paramlist.insert(
         std::make_pair(std::string("WINDOW"), windowHWNDStr.str()));
     inputManager = OIS::InputManager::createInputSystem(paramlist);

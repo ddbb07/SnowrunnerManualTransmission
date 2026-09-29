@@ -23,9 +23,9 @@ void AttachConsole() {
     if (!hasConsole) {
         AllocConsole();
         hasConsole = true;
-        freopen_s((FILE **)stdout, "CONOUT$", "w", stdout);
-        freopen_s((FILE **)stderr, "CONOUT$", "w", stderr);
-        freopen_s((FILE **)stdin, "CONIN$", "r", stdin);
+        freopen_s(reinterpret_cast<FILE **>(stdout), "CONOUT$", "w", stdout);
+        freopen_s(reinterpret_cast<FILE **>(stderr), "CONOUT$", "w", stderr);
+        freopen_s(reinterpret_cast<FILE **>(stdin), "CONIN$", "r", stdin);
         SetConsoleTitleA("Logging Console");
 
         std::cout.clear();
@@ -48,7 +48,7 @@ void DetachDLL() {
     CreateThread(
         nullptr, 0,
         [](LPVOID lpParam) -> DWORD {
-            auto hMod = (HMODULE)lpParam;
+            auto hMod = static_cast<HMODULE>(lpParam);
             FreeLibraryAndExitThread(hMod, 0);
             return 0;
         },

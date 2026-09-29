@@ -75,7 +75,8 @@ void InitGui() {
     bool init_hook = false;
     do {
         if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success) {
-            kiero::bind(8, (void **)&originalPresent, (void *)hookedPresent);
+            kiero::bind(8, reinterpret_cast<void **>(&originalPresent),
+                        reinterpret_cast<void *>(hookedPresent));
             init_hook = true;
         }
     } while (!init_hook);
@@ -99,7 +100,8 @@ void ShutdownGui() {
         mainRenderTargetView = nullptr;
     }
     if (window && originalWndProc) {
-        SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)originalWndProc);
+        SetWindowLongPtr(window, GWLP_WNDPROC,
+                         reinterpret_cast<LONG_PTR>(originalWndProc));
         originalWndProc = nullptr;
     }
     kiero::shutdown();
@@ -157,12 +159,13 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
             window = sd.OutputWindow;
             ID3D11Texture2D *pBackBuffer;
             pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-                                  (LPVOID *)&pBackBuffer);
+                                  reinterpret_cast<LPVOID *>(&pBackBuffer));
             pDevice->CreateRenderTargetView(pBackBuffer, nullptr,
                                             &mainRenderTargetView);
             pBackBuffer->Release();
-            originalWndProc = (WNDPROC)SetWindowLongPtr(
-                window, GWLP_WNDPROC, (LONG_PTR)hookedWndProc);
+            originalWndProc = reinterpret_cast<WNDPROC>(
+                SetWindowLongPtr(window, GWLP_WNDPROC,
+                                 reinterpret_cast<LONG_PTR>(hookedWndProc)));
             InitImGui();
             isGuiInitialized = true;
         }
@@ -188,7 +191,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
         ImVec2 pos = ImVec2(viewport.x * 0.88f, viewport.y * 0.975f);
         ImVec2 boxPos = ImVec2(pos.x * 0.975f, pos.y * 0.999f);
         drawList->AddImage(
-            (ImTextureID)boxTexture, boxPos,
+            reinterpret_cast<ImTextureID>(boxTexture), boxPos,
             ImVec2(boxPos.x + boxWidth, boxPos.y + boxHeight * 0.8f),
             ImVec2(0, 0), ImVec2(1, 1), IM_COL32(255, 255, 255, 127));
         switch (range) {

@@ -15,10 +15,11 @@ HMODULE hModule = GetModuleHandleA(nullptr);
 MODULEINFO mInfo;
 bool temp = GetModuleInformation(GetCurrentProcess(), hModule, &mInfo,
                                  sizeof(MODULEINFO));
-size_t base = (size_t)mInfo.lpBaseOfDll;
+size_t base = reinterpret_cast<size_t>(mInfo.lpBaseOfDll);
 size_t sizeOfImage =
-    ((PIMAGE_NT_HEADERS)((uint8_t *)hModule +
-                         ((PIMAGE_DOS_HEADER)hModule)->e_lfanew))
+    (reinterpret_cast<PIMAGE_NT_HEADERS>(
+         reinterpret_cast<uint8_t *>(hModule) +
+         (reinterpret_cast<PIMAGE_DOS_HEADER>(hModule))->e_lfanew))
         ->OptionalHeader.SizeOfCode;
 
 uint32_t PatternScan(const char *signature, size_t begin = 0, size_t end = 0) {
@@ -56,7 +57,7 @@ uint32_t PatternScan(const char *signature, size_t begin = 0, size_t end = 0) {
         bool found = true;
         for (size_t j = 0; j < patternLength; j++) {
             char a = '\?';
-            char b = *(char *)(base + i + j);
+            char b = *reinterpret_cast<char *>(base + i + j);
             found &= data[j] == a || data[j] == b;
         }
         if (found) {
@@ -76,24 +77,25 @@ uint32_t ToLittleEndian(uint32_t value) {
     uint8_t b2 = (value >> 16) & 0xFF;
     uint8_t b3 = (value >> 24) & 0xFF;
 
-    return ((uint32_t)b0 << 0) | ((uint32_t)b1 << 8) | ((uint32_t)b2 << 16) |
-           ((uint32_t)b3 << 24);
+    return (static_cast<uint32_t>(b0) << 0) | (static_cast<uint32_t>(b1) << 8) |
+           (static_cast<uint32_t>(b2) << 16) |
+           (static_cast<uint32_t>(b3) << 24);
 }
 
 int32_t DigAHole(uintptr_t result) {
     result += base;
     uintptr_t address = result;
-    for (; *(uint8_t *)(address) != 0xE8; address++) {
+    for (; *reinterpret_cast<uint8_t *>(address) != 0xE8; address++) {
     }
     address++;
-    int32_t value = ToLittleEndian(*(int32_t *)(address));
+    int32_t value = ToLittleEndian(*reinterpret_cast<int32_t *>(address));
     address += 4;
     value = result - base + value + (address - result);
     address = base + value;
-    for (; *(uint8_t *)(address) != 0x05; address++) {
+    for (; *reinterpret_cast<uint8_t *>(address) != 0x05; address++) {
     }
     address++;
-    value = ToLittleEndian(*(int32_t *)(address));
+    value = ToLittleEndian(*reinterpret_cast<int32_t *>(address));
     address += 4;
     value = address - base + value;
     return value;
@@ -192,34 +194,47 @@ void InitMemory() {
         ScanQuiet("40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 33 C9 48 89 18"));
     spdlog::info("combine_TRUCK_CONTROL: {:08x}", combine_TRUCK_CONTROLOffset);
 
-    TruckControlPtr =
-        (combine_TRUCK_CONTROL **)(base + combine_TRUCK_CONTROLOffset);
-    ShiftGearO = (Fnc_ShiftGear *)(base + ShiftGearOffset);
-    ShiftToAutoGearO = (Fnc_ShiftToAutoGear *)(base + ShiftToAutoGearOffset);
-    ShiftToHighO = (Fnc_ShiftToHigh *)(base + ShiftToHighOffset);
-    ShiftToReverseO = (Fnc_ShiftToReverse *)(base + ShiftToReverseOffset);
-    ShiftToNeutralO = (Fnc_ShiftToNeutral *)(base + ShiftToNeutralOffset);
-    GetMaxGearO = (Fnc_GetMaxGear *)(base + GetMaxGearOffset);
-    DisableAutoAndShiftO =
-        (Fnc_DisableAutoAndShift *)(base + DisableAutoAndShiftOffset);
-    SetPowerCoefO = (Fnc_SetPowerCoef *)(base + SetPowerCoefOffset);
-    SetCurrentVehicleO =
-        (Fnc_SetCurrentVehicle *)(base + SetCurrentVehicleOffset);
+    TruckControlPtr = reinterpret_cast<combine_TRUCK_CONTROL **>(
+        base + combine_TRUCK_CONTROLOffset);
+    ShiftGearO = reinterpret_cast<Fnc_ShiftGear *>(base + ShiftGearOffset);
+    ShiftToAutoGearO =
+        reinterpret_cast<Fnc_ShiftToAutoGear *>(base + ShiftToAutoGearOffset);
+    ShiftToHighO =
+        reinterpret_cast<Fnc_ShiftToHigh *>(base + ShiftToHighOffset);
+    ShiftToReverseO =
+        reinterpret_cast<Fnc_ShiftToReverse *>(base + ShiftToReverseOffset);
+    ShiftToNeutralO =
+        reinterpret_cast<Fnc_ShiftToNeutral *>(base + ShiftToNeutralOffset);
+    GetMaxGearO = reinterpret_cast<Fnc_GetMaxGear *>(base + GetMaxGearOffset);
+    DisableAutoAndShiftO = reinterpret_cast<Fnc_DisableAutoAndShift *>(
+        base + DisableAutoAndShiftOffset);
+    SetPowerCoefO =
+        reinterpret_cast<Fnc_SetPowerCoef *>(base + SetPowerCoefOffset);
+    SetCurrentVehicleO = reinterpret_cast<Fnc_SetCurrentVehicle *>(
+        base + SetCurrentVehicleOffset);
 
     DetourRestoreAfterWith();
 
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourAttach((PVOID *)&ShiftGearO, (PVOID)Hooked_ShiftGear);
-    DetourAttach((PVOID *)&ShiftToAutoGearO, (PVOID)Hooked_ShiftToAutoGear);
-    DetourAttach((PVOID *)&ShiftToHighO, (PVOID)Hooked_ShiftToHigh);
-    DetourAttach((PVOID *)&ShiftToReverseO, (PVOID)Hooked_ShiftToReverse);
-    DetourAttach((PVOID *)&ShiftToNeutralO, (PVOID)Hooked_ShiftToNeutral);
-    DetourAttach((PVOID *)&GetMaxGearO, (PVOID)Hooked_GetMaxGear);
-    DetourAttach((PVOID *)&DisableAutoAndShiftO,
-                 (PVOID)Hooked_DisableAutoAndShift);
-    DetourAttach((PVOID *)&SetPowerCoefO, (PVOID)Hooked_SetPowerCoef);
-    DetourAttach((PVOID *)&SetCurrentVehicleO, (PVOID)Hooked_SetCurrentVehicle);
+    DetourAttach(reinterpret_cast<PVOID *>(&ShiftGearO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftGear));
+    DetourAttach(reinterpret_cast<PVOID *>(&ShiftToAutoGearO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftToAutoGear));
+    DetourAttach(reinterpret_cast<PVOID *>(&ShiftToHighO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftToHigh));
+    DetourAttach(reinterpret_cast<PVOID *>(&ShiftToReverseO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftToReverse));
+    DetourAttach(reinterpret_cast<PVOID *>(&ShiftToNeutralO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftToNeutral));
+    DetourAttach(reinterpret_cast<PVOID *>(&GetMaxGearO),
+                 reinterpret_cast<PVOID>(Hooked_GetMaxGear));
+    DetourAttach(reinterpret_cast<PVOID *>(&DisableAutoAndShiftO),
+                 reinterpret_cast<PVOID>(Hooked_DisableAutoAndShift));
+    DetourAttach(reinterpret_cast<PVOID *>(&SetPowerCoefO),
+                 reinterpret_cast<PVOID>(Hooked_SetPowerCoef));
+    DetourAttach(reinterpret_cast<PVOID *>(&SetCurrentVehicleO),
+                 reinterpret_cast<PVOID>(Hooked_SetCurrentVehicle));
     DetourTransactionCommit();
 
     if (Vehicle *veh = GetCurrentVehicle()) {
@@ -234,15 +249,23 @@ void InitMemory() {
 void ShutdownMemory() {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourDetach((PVOID *)&ShiftGearO, (PVOID)Hooked_ShiftGear);
-    DetourDetach((PVOID *)&ShiftToAutoGearO, (PVOID)Hooked_ShiftToAutoGear);
-    DetourDetach((PVOID *)&ShiftToHighO, (PVOID)Hooked_ShiftToHigh);
-    DetourDetach((PVOID *)&ShiftToReverseO, (PVOID)Hooked_ShiftToReverse);
-    DetourDetach((PVOID *)&ShiftToNeutralO, (PVOID)Hooked_ShiftToNeutral);
-    DetourDetach((PVOID *)&GetMaxGearO, (PVOID)Hooked_GetMaxGear);
-    DetourDetach((PVOID *)&DisableAutoAndShiftO,
-                 (PVOID)Hooked_DisableAutoAndShift);
-    DetourDetach((PVOID *)&SetPowerCoefO, (PVOID)Hooked_SetPowerCoef);
-    DetourDetach((PVOID *)&SetCurrentVehicleO, (PVOID)Hooked_SetCurrentVehicle);
+    DetourDetach(reinterpret_cast<PVOID *>(&ShiftGearO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftGear));
+    DetourDetach(reinterpret_cast<PVOID *>(&ShiftToAutoGearO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftToAutoGear));
+    DetourDetach(reinterpret_cast<PVOID *>(&ShiftToHighO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftToHigh));
+    DetourDetach(reinterpret_cast<PVOID *>(&ShiftToReverseO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftToReverse));
+    DetourDetach(reinterpret_cast<PVOID *>(&ShiftToNeutralO),
+                 reinterpret_cast<PVOID>(Hooked_ShiftToNeutral));
+    DetourDetach(reinterpret_cast<PVOID *>(&GetMaxGearO),
+                 reinterpret_cast<PVOID>(Hooked_GetMaxGear));
+    DetourDetach(reinterpret_cast<PVOID *>(&DisableAutoAndShiftO),
+                 reinterpret_cast<PVOID>(Hooked_DisableAutoAndShift));
+    DetourDetach(reinterpret_cast<PVOID *>(&SetPowerCoefO),
+                 reinterpret_cast<PVOID>(Hooked_SetPowerCoef));
+    DetourDetach(reinterpret_cast<PVOID *>(&SetCurrentVehicleO),
+                 reinterpret_cast<PVOID>(Hooked_SetCurrentVehicle));
     DetourTransactionCommit();
 }
