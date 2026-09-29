@@ -16,6 +16,7 @@
 #include <dxgi.h>
 #include <imgui.h>
 #include <kiero.h>
+#include <spdlog/spdlog.h>
 #include <stb_image.h>
 #include <string>
 #include <windows.h>
@@ -220,6 +221,10 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
                               IM_COL32(0, 0, 0, 192), "RANGE: HIGH");
             drawList->AddText(font, fontSize, pos, IM_COL32(255, 255, 255, 255),
                               "RANGE: HIGH");
+            break;
+        }
+        default: {
+            spdlog::warn("Unexpected visual gear received: {}", range.load());
             break;
         }
         }
