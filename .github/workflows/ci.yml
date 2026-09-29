@@ -10,17 +10,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          actions-cache-folder: '.xmake-cache'
+          actions-cache-key: 'ubuntu-latest'
 
       - name: Cache xmake packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.xmake
           key: xmake-${{ runner.os }}-${{ hashFiles('xmake.lua', 'third_party/xmake.lua') }}
+
+      - name: Cache build output
+        uses: actions/cache@v6
+        with:
+          path: build
+          key: build-${{ runner.os }}-${{ hashFiles('src/**', 'third_party/**/*.cpp', 'third_party/**/*.h', 'xmake.lua', 'third_party/xmake.lua') }}
+          restore-keys: |
+            build-${{ runner.os }}-
 
       - name: Configure
         run: xmake f -y
@@ -31,7 +42,7 @@ jobs:
   clang-format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Check formatting
         run: find src -type f \( -name "*.cpp" -o -name "*.h" \) | xargs clang-format --dry-run --Werror
@@ -40,14 +51,17 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          actions-cache-folder: '.xmake-cache'
+          actions-cache-key: 'ubuntu-latest'
 
       - name: Cache xmake packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.xmake
           key: xmake-${{ runner.os }}-${{ hashFiles('xmake.lua', 'third_party/xmake.lua') }}
@@ -55,13 +69,10 @@ jobs:
       - name: Generate compile_commands.json
         run: xmake project -k compile_commands .
 
-      - name: Install clang-tidy
-        run: sudo apt-get update && sudo apt-get install -y clang-tidy
-
       - name: Run clang-tidy
         run: |
           LLVMDIR=$(ls -d ~/.xmake/packages/l/llvm-mingw/*/*/)
-          clang-tidy -p . --warnings-as-errors='*' \
+          clang-tidy-18 -p . --warnings-as-errors='*' \
             --extra-arg=--target=x86_64-w64-mingw32 \
             --extra-arg=-isystem --extra-arg="${LLVMDIR}x86_64-w64-mingw32/include/c++/v1" \
             --extra-arg=-isystem --extra-arg="${LLVMDIR}x86_64-w64-mingw32/include" \
