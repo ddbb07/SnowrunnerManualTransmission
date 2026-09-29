@@ -12,10 +12,21 @@
 #include <vector>
 
 // NOLINTBEGIN(performance-no-int-to-ptr)
-HMODULE hModule = GetModuleHandleA(nullptr);
+namespace {
+HMODULE GetCurrentModuleHandle() noexcept { return GetModuleHandleA(nullptr); }
+} // namespace
+
+HMODULE hModule = GetCurrentModuleHandle();
 MODULEINFO mInfo;
-bool temp = GetModuleInformation(GetCurrentProcess(), hModule, &mInfo,
-                                 sizeof(MODULEINFO));
+
+namespace {
+bool FetchModuleInfo() noexcept {
+    return GetModuleInformation(GetCurrentProcess(), hModule, &mInfo,
+                                sizeof(MODULEINFO));
+}
+} // namespace
+
+bool temp = FetchModuleInfo();
 size_t base = reinterpret_cast<size_t>(mInfo.lpBaseOfDll);
 size_t sizeOfImage =
     (reinterpret_cast<PIMAGE_NT_HEADERS>(
