@@ -239,7 +239,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Dummy(ImVec2(0, 0.1f));
-                ImGui::Text(entry.first.c_str());
+                ImGui::Text("%s", entry.first.c_str());
                 ImGui::TableSetColumnIndex(1);
                 std::string buttonText = entry.second.as<std::string>() + "##" +
                                          std::to_string(++count);
@@ -272,7 +272,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Dummy(ImVec2(0, 0.1f));
-                ImGui::Text(entry.first.c_str());
+                ImGui::Text("%s", entry.first.c_str());
                 ImGui::TableSetColumnIndex(1);
                 std::string buttonText = entry.second.as<std::string>() + "##" +
                                          std::to_string(++count);
@@ -305,7 +305,7 @@ HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval,
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Dummy(ImVec2(0, 0.1f));
-                ImGui::Text(entry.first.c_str());
+                ImGui::Text("%s", entry.first.c_str());
                 ImGui::TableSetColumnIndex(1);
                 if (ImGui::Button(
                         entry.second.as<bool>()
