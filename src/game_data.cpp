@@ -2,7 +2,11 @@
 #include "config.h"
 #include "input.h"
 #include "memory.h"
-#include "shared.h"
+#include <algorithm>
+#include <atomic>
+#include <cmath>
+#include <cstdint>
+#include <unordered_map>
 
 std::atomic<float> currentCoef = 1.05f;
 

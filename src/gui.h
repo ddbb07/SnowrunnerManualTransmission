@@ -1,5 +1,8 @@
 #pragma once
-#include "shared.h"
+
+#include <atomic>
+#include <dxgi.h>
+#include <windows.h>
 
 typedef HRESULT(__stdcall *Present)(IDXGISwapChain *pSwapChain,
                                     UINT SyncInterval, UINT Flags);

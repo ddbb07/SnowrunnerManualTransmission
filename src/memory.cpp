@@ -1,7 +1,15 @@
-#include "memory.h"
-#include "config.h"
+#include <windows.h>
+
 #include "game_data.h"
-#include "shared.h"
+#include "memory.h"
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <detours.h>
+#include <psapi.h>
+#include <spdlog/spdlog.h>
+#include <vector>
 
 HMODULE hModule = GetModuleHandleA(NULL);
 MODULEINFO mInfo;

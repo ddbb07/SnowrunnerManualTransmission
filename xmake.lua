@@ -20,6 +20,7 @@ target("SMT")
 
     add_files("src/*.cpp", "third_party/kiero/*.cpp")
     add_includedirs("src", "third_party", "third_party/kiero", "third_party/inifile-cpp/include", "third_party/tsl")
-    add_defines("UNICODE", "_UNICODE")
+    add_defines("VERSION=1.5")
+    add_defines("IMGUI_DEFINE_MATH_OPERATORS", "NOMINMAX", "UNICODE", "_UNICODE", "WIN32_LEAN_AND_MEAN")
     add_syslinks("d3d11", "d3dcompiler", "dxgi", "gdi32", "dwmapi")
     add_shflags("-static", "-Wl,--exclude-all-symbols")

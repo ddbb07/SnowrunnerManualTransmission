@@ -3,7 +3,27 @@
 #include "game_data.h"
 #include "gui.h"
 #include "memory.h"
-#include "shared.h"
+#include <OISInputManager.h>
+#include <OISJoyStick.h>
+#include <OISKeyboard.h>
+#include <OISMouse.h>
+#include <OISPrereqs.h>
+#include <atomic>
+#include <cctype>
+#include <chrono>
+#include <cstddef>
+#include <cstdint>
+#include <functional>
+#include <ranges>
+#include <set>
+#include <spdlog/spdlog.h>
+#include <sstream>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+#include <windows.h>
 
 extern std::unordered_map<Vehicle *, std::atomic<bool>> IsInAuto;
 

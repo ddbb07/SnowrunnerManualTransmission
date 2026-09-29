@@ -1,5 +1,9 @@
 #pragma once
-#include "shared.h"
+
+#include <OISJoyStick.h>
+#include <OISKeyboard.h>
+#include <OISMouse.h>
+#include <set>
 
 namespace SMT {
 class KeyListener : public OIS::KeyListener {

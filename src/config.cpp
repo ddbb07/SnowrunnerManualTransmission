@@ -1,5 +1,8 @@
 #include "config.h"
-#include "shared.h"
+#include <fstream>
+#include <inicpp.h>
+#include <spdlog/spdlog.h>
+#include <string>
 
 const std::string configFilename = "SMT.ini";
 ini::IniFile iniConfig;

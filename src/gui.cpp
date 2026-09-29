@@ -1,3 +1,5 @@
+#define STB_IMAGE_IMPLEMENTATION
+
 #include "gui.h"
 #include "blackbox.h"
 #include "config.h"
@@ -5,8 +7,18 @@
 #include "memory.h"
 #include "shared.h"
 #include "ttlakes_font.h"
-#define STB_IMAGE_IMPLEMENTATION
+#include <atomic>
+#include <backends/imgui_impl_dx11.h>
+#include <backends/imgui_impl_win32.h>
+#include <cstddef>
+#include <cstdint>
+#include <d3d11.h>
+#include <dxgi.h>
+#include <imgui.h>
+#include <kiero.h>
 #include <stb_image.h>
+#include <string>
+#include <windows.h>
 
 Present originalPresent;
 HWND window = NULL;

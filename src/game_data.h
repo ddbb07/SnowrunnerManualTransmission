@@ -1,5 +1,8 @@
 #pragma once
-#include "shared.h"
+
+#include <atomic>
+#include <cstdint>
+#include <unordered_map>
 
 inline const float PowerCoefLowGear = .45f;
 inline const float PowerCoefLowPlusGear = 1.f;

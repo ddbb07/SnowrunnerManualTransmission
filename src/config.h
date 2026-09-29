@@ -1,5 +1,6 @@
 #pragma once
-#include "shared.h"
+
+#include <inicpp.h>
 
 extern ini::IniFile iniConfig;
 extern void LoadIniConfig();

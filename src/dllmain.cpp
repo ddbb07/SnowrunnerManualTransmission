@@ -2,9 +2,18 @@
 #include "gui.h"
 #include "input.h"
 #include "memory.h"
-#include "shared.h"
+#include <atomic>
+#include <cstddef>
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <sec_api/stdio_s.h>
+#include <spdlog/common.h>
+#include <spdlog/logger.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/spdlog.h>
+#include <windows.h>
 
 HMODULE g_hModule = NULL;
 std::atomic<bool> hasConsole = false;

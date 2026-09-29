@@ -1,6 +1,6 @@
 #pragma once
+
 #include "game_data.h"
-#include "shared.h"
 
 extern void DetachDLL();
 
