@@ -4,10 +4,10 @@
 #include <dxgi.h>
 #include <windows.h>
 
-typedef HRESULT(__stdcall *Present)(IDXGISwapChain *pSwapChain,
-                                    UINT SyncInterval, UINT Flags);
-typedef LRESULT(CALLBACK *WNDPROC)(HWND, UINT, WPARAM, LPARAM);
-typedef uintptr_t PTR;
+using Present = HRESULT(__stdcall *)(IDXGISwapChain *pSwapChain,
+                                     UINT SyncInterval, UINT Flags);
+using WNDPROC = LRESULT(CALLBACK *)(HWND, UINT, WPARAM, LPARAM);
+using PTR = uintptr_t;
 
 extern Present originalPresent;
 extern HRESULT __stdcall hookedPresent(IDXGISwapChain *pSwapChain,
