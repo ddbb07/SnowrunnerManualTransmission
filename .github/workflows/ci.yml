@@ -28,7 +28,9 @@ jobs:
       - name: Cache build output
         uses: actions/cache@v6
         with:
-          path: build
+          path: |
+            build
+            .xmake
           key: build-${{ runner.os }}-${{ hashFiles('src/**', 'third_party/**/*.cpp', 'third_party/**/*.h', 'xmake.lua', 'third_party/xmake.lua') }}
           restore-keys: |
             build-${{ runner.os }}-
