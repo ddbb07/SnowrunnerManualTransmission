@@ -93,7 +93,7 @@ int32_t DigAHole(uintptr_t result) {
     auto value = static_cast<int32_t>(
         ToLittleEndian(*reinterpret_cast<int32_t *>(address)));
     address += 4;
-    value = result - base + value + (address - result);
+    value = static_cast<int32_t>(address - base + value);
     address = base + value;
     for (; *reinterpret_cast<uint8_t *>(address) != 0x05; address++) {
     }
@@ -101,7 +101,7 @@ int32_t DigAHole(uintptr_t result) {
     value = static_cast<int32_t>(
         ToLittleEndian(*reinterpret_cast<int32_t *>(address)));
     address += 4;
-    value = address - base + value;
+    value = static_cast<int32_t>(address - base + value);
     return value;
 }
 
