@@ -8,7 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        name: [ubuntu-latest]
+    runs-on: ${{ matrix.name }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -16,19 +19,18 @@ jobs:
 
       - &setup-xmake
         uses: xmake-io/github-action-setup-xmake@v1
-        continue-on-error: true
         with:
           actions-cache-folder: ".xmake-cache"
-          actions-cache-key: "ubuntu-latest"
-          package-cache: true
-          package-cache-key: "ubuntu-latest"
+          actions-cache-key: ${{ matrix.name }}
           build-cache: true
-          build-cache-key: "ubuntu-latest"
+          build-cache-key: ${{ matrix.name }}
 
-      - name: Debug packageskey
-        env:
-          XMAKE_ROOT: "y"
-        run: .xmake-cache/bin/xmake l -v -D .github/debug_packageskey.lua
+      - &package-cache
+        name: Cache xmake packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.xmake
+          key: xmake-${{ matrix.name }}-${{ hashFiles('xmake.lua', 'third_party/xmake.lua') }}
 
       - name: Configure
         run: xmake f -y
@@ -37,7 +39,10 @@ jobs:
         run: xmake -y
 
   clang-format:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        name: [ubuntu-latest]
+    runs-on: ${{ matrix.name }}
     steps:
       - uses: actions/checkout@v7
 
@@ -46,13 +51,18 @@ jobs:
 
   clang-tidy:
     needs: build
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        name: [ubuntu-latest]
+    runs-on: ${{ matrix.name }}
     steps:
       - uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - *setup-xmake
+
+      - *package-cache
 
       - name: Generate compile_commands.json
         run: xmake project -k compile_commands .
