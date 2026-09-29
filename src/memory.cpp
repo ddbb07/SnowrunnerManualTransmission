@@ -11,6 +11,7 @@
 #include <spdlog/spdlog.h>
 #include <vector>
 
+// NOLINTBEGIN(performance-no-int-to-ptr)
 HMODULE hModule = GetModuleHandleA(nullptr);
 MODULEINFO mInfo;
 bool temp = GetModuleInformation(GetCurrentProcess(), hModule, &mInfo,
@@ -273,3 +274,4 @@ void ShutdownMemory() {
                  reinterpret_cast<PVOID>(Hooked_SetCurrentVehicle));
     DetourTransactionCommit();
 }
+// NOLINTEND(performance-no-int-to-ptr)
