@@ -521,13 +521,13 @@ void InitInput() {
     mouse = static_cast<OIS::Mouse *>(
         inputManager->createInputObject(OIS::OISMouse, true));
 
-    SMT::KeyListener *myKeyListener = new SMT::KeyListener();
+    auto *myKeyListener = new SMT::KeyListener();
     keyboard->setEventCallback(myKeyListener);
-    SMT::JoyStickListener *myJoyStickListener = new SMT::JoyStickListener();
+    auto *myJoyStickListener = new SMT::JoyStickListener();
     for (auto &js : joystickList) {
         js->setEventCallback(myJoyStickListener);
     }
-    SMT::MouseListener *myMouseListener = new SMT::MouseListener();
+    auto *myMouseListener = new SMT::MouseListener();
     mouse->setEventCallback(myMouseListener);
 
     CreateThread(nullptr, 0, ProcessInput, GetModuleHandleA(nullptr), 0,

@@ -48,7 +48,7 @@ void DetachDLL() {
     CreateThread(
         nullptr, 0,
         [](LPVOID lpParam) -> DWORD {
-            HMODULE hMod = (HMODULE)lpParam;
+            auto hMod = (HMODULE)lpParam;
             FreeLibraryAndExitThread(hMod, 0);
             return 0;
         },
