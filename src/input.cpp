@@ -38,121 +38,124 @@ std::unordered_map<std::string, bool> wasPressedKb;
 std::unordered_map<std::string, bool> wasPressedJoy;
 std::atomic<int32_t> range = 0;
 
-std::unordered_map<std::string, std::function<void()>> bindFunctions = {
-    {"GEAR 1",
-     []() {
-         if (auto veh = GetCurrentVehicle()) {
-             IsInAuto[veh] = true;
-             veh->ShiftToGear(1);
-         }
-     }},
-    {"GEAR 2",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(2);
-     }},
-    {"GEAR 3",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(3);
-     }},
-    {"GEAR 4",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(4);
-     }},
-    {"GEAR 5",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(5);
-     }},
-    {"GEAR 6",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(6);
-     }},
-    {"GEAR 7",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(7);
-     }},
-    {"GEAR 8",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(8);
-     }},
-    {"GEAR 9",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(9);
-     }},
-    {"GEAR 10",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(10);
-     }},
-    {"GEAR 11",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(11);
-     }},
-    {"GEAR 12",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(12);
-     }},
-    {"GEAR H",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToHighGear();
-     }},
-    {"GEAR L-",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToLowMinusGear();
-     }},
-    {"GEAR L",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToLowGear();
-     }},
-    {"GEAR L+",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToLowPlusGear();
-     }},
-    {"GEAR N",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToGear(0);
-     }},
-    {"GEAR R",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToReverseGear();
-     }},
-    {"GEAR UP",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToNextGear();
-     }},
-    {"GEAR DOWN",
-     []() {
-         if (auto veh = GetCurrentVehicle())
-             veh->ShiftToPrevGear();
-     }},
-    {"CLUTCH", []() { return; }},
-    {"RANGE HIGH",
-     []() {
-         if (range < 1)
-             range++;
-     }},
-    {"RANGE LOW",
-     []() {
-         if (range > -1)
-             range--;
-     }},
-    {"SHOW MENU", []() { showGui = !showGui; }}};
+std::unordered_map<std::string, std::function<void()>> &GetBindFunctions() {
+    static std::unordered_map<std::string, std::function<void()>>
+        bindFunctions = {{"GEAR 1",
+                          []() {
+                              if (auto veh = GetCurrentVehicle()) {
+                                  IsInAuto[veh] = true;
+                                  veh->ShiftToGear(1);
+                              }
+                          }},
+                         {"GEAR 2",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(2);
+                          }},
+                         {"GEAR 3",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(3);
+                          }},
+                         {"GEAR 4",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(4);
+                          }},
+                         {"GEAR 5",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(5);
+                          }},
+                         {"GEAR 6",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(6);
+                          }},
+                         {"GEAR 7",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(7);
+                          }},
+                         {"GEAR 8",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(8);
+                          }},
+                         {"GEAR 9",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(9);
+                          }},
+                         {"GEAR 10",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(10);
+                          }},
+                         {"GEAR 11",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(11);
+                          }},
+                         {"GEAR 12",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(12);
+                          }},
+                         {"GEAR H",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToHighGear();
+                          }},
+                         {"GEAR L-",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToLowMinusGear();
+                          }},
+                         {"GEAR L",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToLowGear();
+                          }},
+                         {"GEAR L+",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToLowPlusGear();
+                          }},
+                         {"GEAR N",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToGear(0);
+                          }},
+                         {"GEAR R",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToReverseGear();
+                          }},
+                         {"GEAR UP",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToNextGear();
+                          }},
+                         {"GEAR DOWN",
+                          []() {
+                              if (auto veh = GetCurrentVehicle())
+                                  veh->ShiftToPrevGear();
+                          }},
+                         {"CLUTCH", []() { return; }},
+                         {"RANGE HIGH",
+                          []() {
+                              if (range < 1)
+                                  range++;
+                          }},
+                         {"RANGE LOW",
+                          []() {
+                              if (range > -1)
+                                  range--;
+                          }},
+                         {"SHOW MENU", []() { showGui = !showGui; }}};
+    return bindFunctions;
+}
 
 extern void DetachDLL();
 
@@ -473,7 +476,7 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
                 wasPressedJoy[action.first] = pressed;
             }
             for (const auto &fnc : functionsToRun) {
-                bindFunctions[fnc]();
+                GetBindFunctions()[fnc]();
                 if (GetIniConfig()["OPTIONS"]["REQUIRE CLUTCH"].as<bool>()) {
                     if (auto veh = GetCurrentVehicle()) {
                         if (!wasPressedKb["CLUTCH"] &&
@@ -487,7 +490,7 @@ DWORD WINAPI ProcessInput(LPVOID lpReserved) {
             }
             if (auto veh = GetCurrentVehicle()) {
                 if (goToNeutral && veh->TruckAction->Gear_1 != 0) {
-                    bindFunctions["GEAR N"]();
+                    GetBindFunctions()["GEAR N"]();
                 }
             }
         }
