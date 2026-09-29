@@ -110,14 +110,16 @@ void InitImGui() {
     ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
     io.FontDefault = io.Fonts->AddFontFromMemoryTTF(
-        (void *)TTLakesNeue_DemiBold_ttf, TTLakesNeue_DemiBold_ttf_len, 24.0f);
+        (void *)TTLakesNeue_DemiBold_ttf.data(),
+        static_cast<int>(TTLakesNeue_DemiBold_ttf.size()), 24.0f);
     ImGui_ImplWin32_Init(window);
     ImGui_ImplDX11_Init(pDevice, pContext);
     if (iniConfig["KEYBOARD"]["SHOW MENU"].as<std::string>() == "NONE") {
         showGui = true;
     }
     unsigned char *pixels = stbi_load_from_memory(
-        blackBox_png, blackBox_png_len, &boxWidth, &boxHeight, &boxChannels, 4);
+        blackBox_png.data(), static_cast<int>(blackBox_png.size()), &boxWidth,
+        &boxHeight, &boxChannels, 4);
     boxTexture = CreateTextureFromPixels(pixels, boxWidth, boxHeight, pDevice);
     stbi_image_free(pixels);
 }
