@@ -72,8 +72,9 @@ jobs:
       - name: Run clang-tidy
         run: |
           LLVMDIR=$(ls -d ~/.xmake/packages/l/llvm-mingw/*/*/)
-          clang-tidy-18 -p . --warnings-as-errors='*' \
+          printf '%s\n' src/*.cpp | xargs -P "$(nproc)" -I{} \
+            clang-tidy-18 -p . --warnings-as-errors='*' \
             --extra-arg=--target=x86_64-w64-mingw32 \
             --extra-arg=-isystem --extra-arg="${LLVMDIR}x86_64-w64-mingw32/include/c++/v1" \
             --extra-arg=-isystem --extra-arg="${LLVMDIR}x86_64-w64-mingw32/include" \
-            src/*.cpp
+            {}
