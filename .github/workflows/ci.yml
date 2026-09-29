@@ -28,7 +28,7 @@ jobs:
       - name: Debug packageskey
         env:
           XMAKE_ROOT: "y"
-        run: .xmake-cache/bin/xmake l utils.ci.packageskey -v -D
+        run: .xmake-cache/bin/xmake l -v -D .github/debug_packageskey.lua
 
       - name: Configure
         run: xmake f -y
