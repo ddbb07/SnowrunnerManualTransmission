@@ -91,7 +91,11 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved) {
         DetachConsole();
         spdlog::shutdown();
         break;
-    default: // Shouldn't be reached
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+        // These are still sent
+        break;
+    default:
         spdlog::warn("Unexpected dwReason received: {}", dwReason);
         break;
     }
